@@ -79,13 +79,13 @@ while 1:
                     x, y, w, h = cv.boundingRect(cnt)
                     x1 = x+0.5*w
                     y1 = y+0.9*h
-                    cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
-                    cv.rectangle (img1, (x, y), (x + w, y + h), (0,255,0), 2)
+                    #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
+                    #cv.rectangle (img1, (x, y), (x + w, y + h), (0,255,0), 2)
                     if bool(mou) is True:
                         mouse.position = (x1+left, y1+top)
                         mouse.click(Button.left, 1)
 
-            cv.imshow("img", img1)
+            #cv.imshow("img", img1)
             #cv.imshow("img2", tra)
             if cv.waitKey(1) & 0xFF == ord('2'):
                 cv.destroyAllWindows()
