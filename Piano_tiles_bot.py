@@ -39,7 +39,9 @@ width = cv.getTrackbarPos("to width", "Tracking")-left
 height = cv.getTrackbarPos("to hight", "Tracking")-top
 cv.destroyAllWindows()
 
-mou = 0
+mou = 0+1
+add = False
+add_v = 0
 
 while 1:
     mou += 1
@@ -53,6 +55,7 @@ while 1:
         break
     elif press == '9':
         print("new game")
+        st = time.time()
         for i in range(4):
             if bool(mou) is True:
                 mouse.position = (485+100*i, 500)
@@ -69,8 +72,13 @@ while 1:
                 keyboard.Listener.stop(listener)
                 break
 
-            #img1 = cv.imread("img.jpg")
-            img1 = np.array(sct.grab({'top': top, 'left': left, 'width': width, 'height': height}))
+            if (time.time() - st)%2 <= 0.1 and press2 == "д":
+                press2 = None
+                add_v += 1
+                print("added")
+
+            img1 = cv.imread("img.jpg")
+            #img1 = np.array(sct.grab({'top': top, 'left': left, 'width': width, 'height': height}))
 
             img = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
 
@@ -83,14 +91,14 @@ while 1:
                 if area > 1000:
                     x, y, w, h = cv.boundingRect(cnt)
                     x1 = x+0.5*w
-                    y1 = y+0.97*h
-                    #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
-                    #cv.rectangle (img1, (x, y), (x + w, y + h), (0,255,0), 2)
+                    y1 = y+0.97*h + add_v*0.2*h#*cv.getTrackbarPos("val", "Tracking")
+                    cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
+                    cv.rectangle (img1, (x, y), (x + w, y + h), (0,255,0), 2)
                     if bool(mou) is True:
                         mouse.position = (x1+left, y1+top)
                         mouse.click(Button.left, 1)
 
-            #cv.imshow("img", img1)
+            cv.imshow("img", img1)
             #cv.imshow("img2", tra)
             if cv.waitKey(1) & 0xFF == ord('2'):
                 cv.destroyAllWindows()
