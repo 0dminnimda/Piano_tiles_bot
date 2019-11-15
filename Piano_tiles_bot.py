@@ -38,6 +38,10 @@ left = cv.getTrackbarPos("from width", "Tracking")
 width = cv.getTrackbarPos("to width", "Tracking")-left
 height = cv.getTrackbarPos("to hight", "Tracking")-top
 
+press2 = None
+#with keyboard.Listener(on_press=on_press2,on_release=on_release) as listener2:
+#    listener2.start()
+
 while 1:
     press = None
     press2 = None
@@ -54,6 +58,15 @@ while 1:
 
         #for _ in range(100):
         while 1:
+            listener = keyboard.Listener(
+                on_press = on_press2, 
+                on_release = on_release)
+            listener.start()
+            if press2 == '6':
+                cv.destroyAllWindows()
+                keyboard.Listener.stop(listener)
+                break
+
             #img1 = cv.imread("img.jpg")
             img1 = np.array(sct.grab({'top': top, 'left': left, 'width': width, 'height': height}))
 
@@ -69,17 +82,13 @@ while 1:
                     M = cv.moments(cnt)
                     x = int(M['m10']/area)
                     y = int(M['m01']/area)
-                    #cv.circle(img1,(x,y),15,(0,255,255), 2)
-                    mouse.position = (x+left, y+top)
-                    mouse.click(Button.left, 1)
+                    cv.circle(img1,(x,y),15,(0,255,255), 2)
+                    #mouse.position = (x+left, y+top)
+                    #mouse.click(Button.left, 1)
 
             cv.imshow("img2", tra)
             cv.imshow("img", img1)
             if cv.waitKey(1) & 0xFF == ord('2'):
                 cv.destroyAllWindows()
                 break
-            #with keyboard.Listener(on_press=on_press2,on_release=on_release) as listener:pass
-            #if press2 == "6":
-            #    cv.destroyAllWindows()
-            #    break
             
