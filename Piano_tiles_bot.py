@@ -39,6 +39,8 @@ width = cv.getTrackbarPos("to width", "Tracking")-left
 height = cv.getTrackbarPos("to hight", "Tracking")-top
 cv.destroyAllWindows()
 
+mou = 0
+
 while 1:
     press = None
     press2 = None
@@ -48,9 +50,9 @@ while 1:
         break
     elif press == '9':
         for i in range(4):
-            #mouse.position = (485+100*i, 500)
-            #mouse.click(Button.left, 1)
-            pass
+            if bool(mou) is True:
+                mouse.position = (485+100*i, 500)
+                mouse.click(Button.left, 1)
 
         while 1:
             listener = keyboard.Listener(
@@ -74,13 +76,14 @@ while 1:
             for cnt in contour:
                 area = cv.contourArea(cnt)
                 if area > 1000:
-                    M = cv.moments(cnt)
-                    x = int(M['m10']/area)
-                    y = int(M['m01']/area)
-                    print(M['m01'])
-                    cv.circle(img1,(x,y),15,(0,255,255), 2)
-                    #mouse.position = (x+left, y+top)
-                    #mouse.click(Button.left, 1)
+                    x, y, w, h = cv.boundingRect(cnt)
+                    x1 = x+0.5*w
+                    y1 = y+h
+                    #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
+                    #cv.rectangle (img1, (x, y), (x + w, y + h), (0,255,0), 2)
+                    if bool(mou) is True:
+                        mouse.position = (x+left, y+top)
+                        mouse.click(Button.left, 1)
 
             #cv.imshow("img2", tra)
             cv.imshow("img", img1)
