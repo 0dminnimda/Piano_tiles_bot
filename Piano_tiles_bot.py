@@ -62,7 +62,7 @@ while 1:
                 mouse.click(Button.left, 1)
 
         while 1:
-            listener = keyboard.Listener(6
+            listener = keyboard.Listener(
                 on_press = on_press2, 
                 on_release = on_release)
             listener.start()
