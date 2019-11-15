@@ -38,10 +38,6 @@ left = cv.getTrackbarPos("from width", "Tracking")
 width = cv.getTrackbarPos("to width", "Tracking")-left
 height = cv.getTrackbarPos("to hight", "Tracking")-top
 
-press2 = None
-#with keyboard.Listener(on_press=on_press2,on_release=on_release) as listener2:
-#    listener2.start()
-
 while 1:
     press = None
     press2 = None
