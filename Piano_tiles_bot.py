@@ -37,22 +37,20 @@ top = cv.getTrackbarPos("from hight", "Tracking")
 left = cv.getTrackbarPos("from width", "Tracking")
 width = cv.getTrackbarPos("to width", "Tracking")-left
 height = cv.getTrackbarPos("to hight", "Tracking")-top
+cv.destroyAllWindows()
 
 while 1:
     press = None
     press2 = None
     with keyboard.Listener(on_press=on_press,on_release=on_release) as listener:
         listener.join()
-    if press == '9':
-        #mouse.position = (453, 1418)
-        #mouse.click(Button.left, 1)
-        #time.sleep(1)
+    if press == '3':
+        break
+    elif press == '9':
         for i in range(4):
             mouse.position = (485+100*i, 500)
             mouse.click(Button.left, 1)
-        #time.sleep(0.5)
 
-        #for _ in range(100):
         while 1:
             listener = keyboard.Listener(
                 on_press = on_press2, 
@@ -79,8 +77,8 @@ while 1:
                     x = int(M['m10']/area)
                     y = int(M['m01']/area)
                     cv.circle(img1,(x,y),15,(0,255,255), 2)
-                    #mouse.position = (x+left, y+top)
-                    #mouse.click(Button.left, 1)
+                    mouse.position = (x+left, y+top)
+                    mouse.click(Button.left, 1)
 
             cv.imshow("img2", tra)
             cv.imshow("img", img1)
