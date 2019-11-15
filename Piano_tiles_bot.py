@@ -62,7 +62,7 @@ while 1:
                 mouse.click(Button.left, 1)
 
         while 1:
-            listener = keyboard.Listener(
+            listener = keyboard.Listener(6
                 on_press = on_press2, 
                 on_release = on_release)
             listener.start()
@@ -76,6 +76,7 @@ while 1:
                 press2 = None
                 add_v += 1
                 print("added", time.time()-st)
+                #1-375; 2-
 
             if bool(mou) is True:
                 img1 = np.array(sct.grab({'top': top, 'left': left, 'width': width, 'height': height}))
