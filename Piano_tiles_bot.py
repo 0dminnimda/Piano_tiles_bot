@@ -47,8 +47,10 @@ while 1:
     with keyboard.Listener(on_press=on_press,on_release=on_release) as listener:
         listener.join()
     if press == '3':
+        print("finishing")
         break
     elif press == '9':
+        print("new game")
         for i in range(4):
             if bool(mou) is True:
                 mouse.position = (485+100*i, 500)
@@ -60,6 +62,7 @@ while 1:
                 on_release = on_release)
             listener.start()
             if press2 == '6':
+                print("stop game")
                 cv.destroyAllWindows()
                 keyboard.Listener.stop(listener)
                 break
@@ -78,7 +81,7 @@ while 1:
                 if area > 1000:
                     x, y, w, h = cv.boundingRect(cnt)
                     x1 = x+0.5*w
-                    y1 = y+0.9*h
+                    y1 = y+h
                     #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
                     #cv.rectangle (img1, (x, y), (x + w, y + h), (0,255,0), 2)
                     if bool(mou) is True:
