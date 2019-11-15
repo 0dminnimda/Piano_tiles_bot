@@ -39,9 +39,11 @@ width = cv.getTrackbarPos("to width", "Tracking")-left
 height = cv.getTrackbarPos("to hight", "Tracking")-top
 cv.destroyAllWindows()
 
-mou = 1
+mou = 0
 
 while 1:
+    mou += 1
+    mou %= 2
     press = None
     press2 = None
     with keyboard.Listener(on_press=on_press,on_release=on_release) as listener:
@@ -81,7 +83,7 @@ while 1:
                 if area > 1000:
                     x, y, w, h = cv.boundingRect(cnt)
                     x1 = x+0.5*w
-                    y1 = y+h
+                    y1 = y+0.97*h
                     #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
                     #cv.rectangle (img1, (x, y), (x + w, y + h), (0,255,0), 2)
                     if bool(mou) is True:
