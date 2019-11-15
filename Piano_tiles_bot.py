@@ -41,7 +41,6 @@ cv.destroyAllWindows()
 
 mou = 0
 add_v = 0
-st = time.time()
 
 while 1:
     add_v = 0
@@ -55,6 +54,7 @@ while 1:
         print("finishing", time.time()-st)
         break
     elif press == '9':
+        st = time.time()
         print("new game", time.time()-st)
         for i in range(4):
             if bool(mou) is True:
