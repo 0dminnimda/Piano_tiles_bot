@@ -39,7 +39,7 @@ width = cv.getTrackbarPos("to width", "Tracking")-left
 height = cv.getTrackbarPos("to hight", "Tracking")-top
 cv.destroyAllWindows()
 
-mou = 1
+mou = 0
 add_v = 0
 st = time.time()
 
@@ -93,14 +93,14 @@ while 1:
                 if area > 1000:
                     x, y, w, h = cv.boundingRect(cnt)
                     x1 = x+0.5*w
-                    y1 = y+0.97*h + add_v*20#h*cv.getTrackbarPos("val", "Tracking")
-                    cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
-                    cv.rectangle (img1, (x, y), (x + w, y + h), (0,255,0), 2)
+                    y1 = y+0.97*h + add_v*10#h*cv.getTrackbarPos("val", "Tracking")
+                    #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
+                    #cv.rectangle (img1, (x, y), (x + w, y + h), (0,255,0), 2)
                     if bool(mou) is True:
                         mouse.position = (x1+left, y1+top)
                         mouse.click(Button.left, 1)
 
-            cv.imshow("img", img1)
+            #cv.imshow("img", img1)
             #cv.imshow("img2", tra)
             if cv.waitKey(1) & 0xFF == ord('2'):
                 cv.destroyAllWindows()
