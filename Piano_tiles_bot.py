@@ -33,8 +33,11 @@ cv.createTrackbar("to hight", "Tracking", 724, 1440, nothing)
 cv.createTrackbar("from width", "Tracking", 420, 900, nothing)
 cv.createTrackbar("to width", "Tracking", 800, 2560, nothing)
 
-
-#cv.destroyAllWindows()
+top = cv.getTrackbarPos("from hight", "Tracking")
+left = cv.getTrackbarPos("from width", "Tracking")
+width = cv.getTrackbarPos("to width", "Tracking")-left
+height = cv.getTrackbarPos("to hight", "Tracking")-top
+cv.destroyAllWindows()
 
 while 1:
     press = None
@@ -50,10 +53,6 @@ while 1:
             pass
 
         while 1:
-            top = cv.getTrackbarPos("from hight", "Tracking")
-            left = cv.getTrackbarPos("from width", "Tracking")
-            width = cv.getTrackbarPos("to width", "Tracking")-left
-            height = cv.getTrackbarPos("to hight", "Tracking")-top
             listener = keyboard.Listener(
                 on_press = on_press2, 
                 on_release = on_release)
