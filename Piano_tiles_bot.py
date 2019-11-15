@@ -28,16 +28,13 @@ mouse = Controller()
 sct = mss()
 
 cv.namedWindow("Tracking", cv.WINDOW_NORMAL)
-cv.createTrackbar("from hight", "Tracking", 45, 800, nothing)
-cv.createTrackbar("to hight", "Tracking", 755, 1440, nothing)
-cv.createTrackbar("from width", "Tracking", 440, 900, nothing)
-cv.createTrackbar("to width", "Tracking", 840, 2560, nothing)
+cv.createTrackbar("from hight", "Tracking", 43, 800, nothing)
+cv.createTrackbar("to hight", "Tracking", 724, 1440, nothing)
+cv.createTrackbar("from width", "Tracking", 420, 900, nothing)
+cv.createTrackbar("to width", "Tracking", 800, 2560, nothing)
 
-top = cv.getTrackbarPos("from hight", "Tracking")
-left = cv.getTrackbarPos("from width", "Tracking")
-width = cv.getTrackbarPos("to width", "Tracking")-left
-height = cv.getTrackbarPos("to hight", "Tracking")-top
-cv.destroyAllWindows()
+
+#cv.destroyAllWindows()
 
 while 1:
     press = None
@@ -48,10 +45,15 @@ while 1:
         break
     elif press == '9':
         for i in range(4):
-            mouse.position = (485+100*i, 500)
-            mouse.click(Button.left, 1)
+            #mouse.position = (485+100*i, 500)
+            #mouse.click(Button.left, 1)
+            pass
 
         while 1:
+            top = cv.getTrackbarPos("from hight", "Tracking")
+            left = cv.getTrackbarPos("from width", "Tracking")
+            width = cv.getTrackbarPos("to width", "Tracking")-left
+            height = cv.getTrackbarPos("to hight", "Tracking")-top
             listener = keyboard.Listener(
                 on_press = on_press2, 
                 on_release = on_release)
@@ -76,13 +78,15 @@ while 1:
                     M = cv.moments(cnt)
                     x = int(M['m10']/area)
                     y = int(M['m01']/area)
+                    print(M['m01'])
                     cv.circle(img1,(x,y),15,(0,255,255), 2)
-                    mouse.position = (x+left, y+top)
-                    mouse.click(Button.left, 1)
+                    #mouse.position = (x+left, y+top)
+                    #mouse.click(Button.left, 1)
 
-            cv.imshow("img2", tra)
+            #cv.imshow("img2", tra)
             cv.imshow("img", img1)
             if cv.waitKey(1) & 0xFF == ord('2'):
                 cv.destroyAllWindows()
                 break
+            pass
             
