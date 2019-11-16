@@ -75,6 +75,7 @@ while 1:
             if bool(mou) is True:
                 mouse.position = (485+100*i, 500)
                 mouse.click(Button.left, 1)
+        time.sleep(0.1)
 
         while 1:
             listener = keyboard.Listener(
@@ -108,7 +109,7 @@ while 1:
                     if area > 250:
                         x, y, w, h = cv.boundingRect(cnt)
                         x1 = x+0.5*w
-                        y1 = y+0.93*h + add_v*5  # h*cv.getTrackbarPos("val", "Tracking")
+                        y1 = y+0.9*h + add_v*5  # h*cv.getTrackbarPos("val", "Tracking")
                         #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
                         #cv.rectangle (img1, (x, y), (x + w, y + h), (0,255,0), 2)
                         if bool(mou) is True:
