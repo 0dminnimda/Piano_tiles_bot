@@ -29,69 +29,34 @@ sct = mss()
 
 def init_tr():
     cv.namedWindow("Tracking1", cv.WINDOW_NORMAL)
-
-    cv.createTrackbar("from_hight1", "Tracking1", 53, 200, nothing)
-    cv.createTrackbar("to_hight1", "Tracking1", 545, 1440, nothing)
-
-    cv.createTrackbar("from_hight2", "Tracking1", 53, 200, nothing)
-    cv.createTrackbar("to_hight2", "Tracking1", 545, 1440, nothing)
-
-    cv.createTrackbar("from_hight3", "Tracking1", 53, 200, nothing)
-    cv.createTrackbar("to_hight3", "Tracking1", 545, 1440, nothing)
-
-    cv.createTrackbar("from_hight4", "Tracking1", 53, 200, nothing)
-    cv.createTrackbar("to_hight4", "Tracking1", 545, 1440, nothing)
-
+    cv.createTrackbar("num", "Tracking1", 4, 10, nothing)
+    cv.createTrackbar("val", "Tracking1", 5, 200, nothing)
+    cv.createTrackbar("dist", "Tracking1", 200, 1000, nothing)
+    cv.createTrackbar("shift", "Tracking1", 0, 500, nothing)
 
     cv.createTrackbar("from_width", "Tracking1", 303, 900, nothing)
     cv.createTrackbar("to_width", "Tracking1", 580, 2560, nothing)
-
-    #cv.createTrackbar("from hight", "Tracking", 43, 800, nothing)
-    #cv.createTrackbar("to hight", "Tracking", 500, 1440, nothing) #724
-
-    #cv.createTrackbar("from width", "Tracking", 40, 100, nothing)
-    #cv.createTrackbar("to width", "Tracking", 60, 100, nothing)
-
-    #cv.createTrackbar("from width2", "Tracking", 0, 100, nothing)
-    #cv.createTrackbar("to width2", "Tracking", 20, 100, nothing)
-
-    #cv.createTrackbar("from width3", "Tracking", 55, 100, nothing)
-    #cv.createTrackbar("to width3", "Tracking", 75, 100, nothing)
-
-    #cv.createTrackbar("from width4", "Tracking", 40, 100, nothing)
-    #cv.createTrackbar("to width4", "Tracking", 60, 100, nothing)
     pass
 
-def get_tr():
-    top = [cv.getTrackbarPos(f"from_hight{i+1}", "Tracking1") for i in range(4)]
-    height = [cv.getTrackbarPos(f"to_hight{i+1}", "Tracking1")-ftop[i] for i in range(4)]
+def get_tr(num):
+    top = [53 for i in range(num)]
+    height = [53-top[i]+cv.getTrackbarPos("val", "Tracking1") for i in range(num)]
     left = cv.getTrackbarPos("from_width", "Tracking1")
-    width = cv.getTrackbarPos("to_width", "Tracking1")-fleft
+    width = cv.getTrackbarPos("to_width", "Tracking1")-left
 
-    top = [top[0], top[1], top[2], top[3]]
-    height = [height[0], height[1], height[2], height[3]]
+    shift = cv.getTrackbarPos("shift", "Tracking1")
+    dist = cv.getTrackbarPos("dist", "Tracking1")
+    for i in range(len(top)):
+        top[i] += shift
+        if i != 0:
+            top[i] += dist
 
-    #top = [cv.getTrackbarPos("from hight", "Tracking"), cv.getTrackbarPos("from hight", "Tracking"),
-    #       cv.getTrackbarPos("from hight", "Tracking"), cv.getTrackbarPos("from hight", "Tracking")]
-    #height = cv.getTrackbarPos("to hight", "Tracking")-top[0]
-
-    #left = [cv.getTrackbarPos("from width", "Tracking"), cv.getTrackbarPos("from width2", "Tracking"),
-    #        cv.getTrackbarPos("from width3", "Tracking"), cv.getTrackbarPos("from width4", "Tracking")]
-    #width = [cv.getTrackbarPos("to width", "Tracking"),
-    #        cv.getTrackbarPos("to width2", "Tracking"),
-    #        cv.getTrackbarPos("to width3", "Tracking"),
-    #        cv.getTrackbarPos("to width4", "Tracking")]
-
-    #top = [top[0], top[1]+25, top[2]+25, top[3]]
-    #left = [left[0]+420, left[1]+520, left[2]+620, left[3]+720]
-    #width = [width[0]+421-left[0], width[1]+521-left[1],
-    #         width[2]+621-left[2], width[3]+721-left[3]]
-
-    return  top, height, left, width #, ftop, fheight, fleft, fwidth
+    return  top, height, left, width
 
 mou = 1
 init_tr()
-top, height, left, width = get_tr()
+num = cv.getTrackbarPos("num", "Tracking1")
+top, height, left, width = get_tr(num)
 #print(top, height, left, width)
 #cv.destroyAllWindows()
 
@@ -112,7 +77,8 @@ while 1:
         time.sleep(0.1)
 
         while 1:
-            top, height, left, width = get_tr()
+            num = cv.getTrackbarPos("num", "Tracking1")
+            top, height, left, width = get_tr(num)
             listener = keyboard.Listener(
                 on_press = on_press2, 
                 on_release = on_release)
@@ -130,8 +96,8 @@ while 1:
                 print("added", time.time()-st)
                 #1-375; 2-3
 
-            for i in range(4):
-                img1 = np.array(sct.grab({'top': top[i], 'left': left[i], 'width': width[i], 'height': height}))
+            for i in range(num):
+                img1 = np.array(sct.grab({'top': top[i], 'left': left, 'width': width, 'height': height[i]}))
                 # 'top': top, 'left': left, 'width': width, 'height': height
                 #img1 = cv.imread("img.jpg")
 
