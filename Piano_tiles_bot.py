@@ -30,8 +30,8 @@ sct = mss()
 def init_tr():
     cv.namedWindow("Tracking1", cv.WINDOW_NORMAL)
     cv.createTrackbar("num", "Tracking1", 4, 10, nothing)
-    cv.createTrackbar("val", "Tracking1", 5, 200, nothing)
-    cv.createTrackbar("dist", "Tracking1", 200, 1000, nothing)
+    cv.createTrackbar("val", "Tracking1", 40, 200, nothing)
+    cv.createTrackbar("dist", "Tracking1", 123, 200, nothing)
     cv.createTrackbar("shift", "Tracking1", 0, 500, nothing)
 
     cv.createTrackbar("from_width", "Tracking1", 303, 900, nothing)
@@ -49,7 +49,7 @@ def get_tr(num):
     for i in range(len(top)):
         top[i] += shift
         if i != 0:
-            top[i] += dist
+            top[i] += dist*i
 
     return  top, height, left, width
 
@@ -57,7 +57,6 @@ mou = 1
 init_tr()
 num = cv.getTrackbarPos("num", "Tracking1")
 top, height, left, width = get_tr(num)
-#print(top, height, left, width)
 #cv.destroyAllWindows()
 
 while 1:
@@ -98,8 +97,6 @@ while 1:
 
             for i in range(num):
                 img1 = np.array(sct.grab({'top': top[i], 'left': left, 'width': width, 'height': height[i]}))
-                # 'top': top, 'left': left, 'width': width, 'height': height
-                #img1 = cv.imread("img.jpg")
 
                 img = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
 
@@ -115,7 +112,7 @@ while 1:
                         y2 = y+0.5*h
                         y1 = y+0.95*h + add_v*5
                         cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
-                        cv.rectangle(img1, (x, y), (x + w, y + h), (0,255,0), 2)
+                        #cv.rectangle(img1, (x, y), (x + w, y + h), (0,255,0), 2)
                         cv.putText(img1, "%d" % h, (int(x1)-30, int(y2)), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
                         if mou == 0:
                             mouse.position = (x1+left[i], y1+top[i]) # x1+left, y1+top
