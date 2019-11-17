@@ -28,7 +28,13 @@ mouse = Controller()
 sct = mss()
 
 def init_tr():
-    cv.namedWindow("Tracking", cv.WINDOW_NORMAL)
+    cv.namedWindow("Tracking1", cv.WINDOW_NORMAL)
+
+    cv.createTrackbar("f_from_hight", "Tracking1", 53, 800, nothing)
+    cv.createTrackbar("f_to_hight", "Tracking1", 545, 1440, nothing)
+    cv.createTrackbar("f_from_width", "Tracking1", 303, 900, nothing)
+    cv.createTrackbar("f_to_width", "Tracking1", 580, 2560, nothing)
+
     cv.createTrackbar("from hight", "Tracking", 43, 800, nothing)
     cv.createTrackbar("to hight", "Tracking", 500, 1440, nothing) #724
 
@@ -43,8 +49,14 @@ def init_tr():
 
     cv.createTrackbar("from width4", "Tracking", 40, 100, nothing)
     cv.createTrackbar("to width4", "Tracking", 60, 100, nothing)
+    pass
 
 def get_tr():
+    ftop = cv.getTrackbarPos("f_from_hight", "Tracking1")
+    fleft = cv.getTrackbarPos("f_from_width", "Tracking1")
+    fwidth = cv.getTrackbarPos("f_to_width", "Tracking1")-fleft
+    fheight = cv.getTrackbarPos("f_to_hight", "Tracking1")-ftop
+
     top = [cv.getTrackbarPos("from hight", "Tracking"), cv.getTrackbarPos("from hight", "Tracking")+25,
            cv.getTrackbarPos("from hight", "Tracking")+25, cv.getTrackbarPos("from hight", "Tracking")]
     height = cv.getTrackbarPos("to hight", "Tracking")-top[0]
@@ -54,12 +66,13 @@ def get_tr():
     width = [cv.getTrackbarPos("to width", "Tracking")+421-left[0], cv.getTrackbarPos("to width2", "Tracking")+521-left[1],
             cv.getTrackbarPos("to width3", "Tracking")+621-left[2], cv.getTrackbarPos("to width4", "Tracking")+721-left[3]]
 
-    return top, height, left, width
+    return  top, height, left, width #, ftop, fheight, fleft, fwidth
 
 mou = 1
 init_tr()
 top, height, left, width = get_tr()
-cv.destroyAllWindows()
+#print(top, height, left, width)
+#cv.destroyAllWindows()
 
 while 1:
     add_v = 0
@@ -68,27 +81,29 @@ while 1:
     with keyboard.Listener(on_press=on_press,on_release=on_release) as listener:
         listener.join()
     st = time.time()
-    if press == '9':
+    if (press == 'й' or press == 'q'):
         st = time.time()
         print("new game", time.time()-st)
         for i in range(4):
-            if bool(mou) is True:
+            if mou == 0:
                 mouse.position = (485+100*i, 500)
                 mouse.click(Button.left, 1)
         time.sleep(0.1)
 
         while 1:
+            top, height, left, width = get_tr()
             listener = keyboard.Listener(
                 on_press = on_press2, 
                 on_release = on_release)
             listener.start()
-            if press2 == '6':
+            if (press2 == 'ц' or press2 == 'w'):
                 print("stop game", time.time()-st)
                 cv.destroyAllWindows()
                 keyboard.Listener.stop(listener)
+                init_tr()
                 break
 
-            if (time.time() - st)%2 <= 0.06 and press2 == "д":
+            if (time.time() - st)%2 <= 0.06 and (press2 == "ы" or press2 == "s"):
                 press2 = None
                 add_v += 1
                 print("added", time.time()-st)
@@ -96,6 +111,7 @@ while 1:
 
             for i in range(4):
                 img1 = np.array(sct.grab({'top': top[i], 'left': left[i], 'width': width[i], 'height': height}))
+                # 'top': top, 'left': left, 'width': width, 'height': height
                 #img1 = cv.imread("img.jpg")
 
                 img = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
@@ -109,19 +125,21 @@ while 1:
                     if area > 250:
                         x, y, w, h = cv.boundingRect(cnt)
                         x1 = x+0.5*w
-                        y1 = y+0.9*h + add_v*5  # h*cv.getTrackbarPos("val", "Tracking")
-                        #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
-                        #cv.rectangle (img1, (x, y), (x + w, y + h), (0,255,0), 2)
-                        if bool(mou) is True:
-                            mouse.position = (x1+left[i], y1+top[i])
+                        y2 = y+0.5*h
+                        y1 = y+0.95*h + add_v*5
+                        cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
+                        cv.rectangle(img1, (x, y), (x + w, y + h), (0,255,0), 2)
+                        cv.putText(img1, "%d" % h, (int(x1)-30, int(y2)), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                        if mou == 0:
+                            mouse.position = (x1+left[i], y1+top[i]) # x1+left, y1+top
                             mouse.click(Button.left, 1)
 
-                #cv.imshow(f"img{i}", img1)
+                cv.imshow(f"img{i}", img1)
                 #cv.imshow("img2", tra)
-                #if cv.waitKey(1) & 0xFF == ord('2'):
-                #    cv.destroyAllWindows()
-                #    break
+                if cv.waitKey(1) & 0xFF == ord('2'):
+                    cv.destroyAllWindows()
+                    break
 
-    elif press == '3':
+    elif (press == 'у' or press == 'e'):
         print("finishing", time.time()-st)
         break
