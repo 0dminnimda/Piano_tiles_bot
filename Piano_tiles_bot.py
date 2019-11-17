@@ -30,7 +30,7 @@ sct = mss()
 def init_tr():
     cv.namedWindow("Tracking1", cv.WINDOW_NORMAL)
     cv.createTrackbar("num", "Tracking1", 4, 10, nothing)
-    cv.createTrackbar("val", "Tracking1", 40, 200, nothing)
+    cv.createTrackbar("val", "Tracking1", 20, 200, nothing)
     cv.createTrackbar("dist", "Tracking1", 123, 200, nothing)
     cv.createTrackbar("shift", "Tracking1", 0, 500, nothing)
 
@@ -57,7 +57,7 @@ mou = 1
 init_tr()
 num = cv.getTrackbarPos("num", "Tracking1")
 top, height, left, width = get_tr(num)
-#cv.destroyAllWindows()
+cv.destroyAllWindows()
 
 while 1:
     add_v = 0
@@ -76,8 +76,8 @@ while 1:
         time.sleep(0.1)
 
         while 1:
-            num = cv.getTrackbarPos("num", "Tracking1")
-            top, height, left, width = get_tr(num)
+            #num = cv.getTrackbarPos("num", "Tracking1")
+            #top, height, left, width = get_tr(num)
             listener = keyboard.Listener(
                 on_press = on_press2, 
                 on_release = on_release)
@@ -111,18 +111,18 @@ while 1:
                         x1 = x+0.5*w
                         y2 = y+0.5*h
                         y1 = y+0.95*h + add_v*5
-                        cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
+                        #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
                         #cv.rectangle(img1, (x, y), (x + w, y + h), (0,255,0), 2)
-                        cv.putText(img1, "%d" % h, (int(x1)-30, int(y2)), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                        #cv.putText(img1, "%d" % area, (int(x1)-30, int(y2)+7), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
                         if mou == 0:
                             mouse.position = (x1+left[i], y1+top[i]) # x1+left, y1+top
                             mouse.click(Button.left, 1)
 
-                cv.imshow(f"img{i}", img1)
+                #cv.imshow(f"img{i}", img1)
                 #cv.imshow("img2", tra)
-                if cv.waitKey(1) & 0xFF == ord('2'):
-                    cv.destroyAllWindows()
-                    break
+                #if cv.waitKey(1) & 0xFF == ord('2'):
+                #    cv.destroyAllWindows()
+                #    break
 
     elif (press == 'у' or press == 'e'):
         print("finishing", time.time()-st)
