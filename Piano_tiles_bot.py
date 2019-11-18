@@ -30,7 +30,7 @@ sct = mss()
 def init_tr():
     cv.namedWindow("Tracking1", cv.WINDOW_NORMAL)
     cv.createTrackbar("num", "Tracking1", 4, 10, nothing)
-    cv.createTrackbar("val", "Tracking1", 20, 200, nothing)
+    cv.createTrackbar("val", "Tracking1", 5, 200, nothing)
     cv.createTrackbar("dist", "Tracking1", 123, 200, nothing)
     cv.createTrackbar("shift", "Tracking1", 0, 500, nothing)
 
@@ -53,13 +53,13 @@ def get_tr(num):
 
     return  top, height, left, width
 
-mou = 1
+mou = 0
 init_tr()
 num = cv.getTrackbarPos("num", "Tracking1")
 top, height, left, width = get_tr(num)
-cv.destroyAllWindows()
 
 while 1:
+    cv.destroyAllWindows()
     add_v = 0
     press = None
     press2 = None
@@ -71,13 +71,42 @@ while 1:
         print("new game", time.time()-st)
         for i in range(4):
             if mou == 0:
-                mouse.position = (485+100*i, 500)
+                mouse.position = (340+72*i, 360)
                 mouse.click(Button.left, 1)
         time.sleep(0.1)
 
         while 1:
             #num = cv.getTrackbarPos("num", "Tracking1")
             #top, height, left, width = get_tr(num)
+
+            for i in range(num-1, -1, -1):
+                img1 = np.array(sct.grab({'top': top[i], 'left': left, 'width': width, 'height': height[i]}))
+
+                img = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
+
+                _, tra = cv.threshold(img, 20, 255, 1)
+
+                contour, _ = cv.findContours(tra, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+                #cv.drawContours(img1, contour, -1, (0,0,255))
+                for cnt in contour:
+                    area = cv.contourArea(cnt)
+                    if area > 25:
+                        x, y, w, h = cv.boundingRect(cnt)
+                        x1 = x+0.5*w
+                        #y2 = y+0.5*h
+                        y1 = y+0.95*h + add_v*5
+                        #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
+                        #cv.rectangle(img1, (x, y), (x + w, y + h), (0,255,0), 2)
+                        #cv.putText(img1, "%d" % area, (int(x1)-30, int(y2)+7), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+                        mouse.position = (x1+left, y1+top[i]) # x1+left, y1+top
+                        mouse.click(Button.left, 1)
+
+                #cv.imshow(f"img{i}", img1)
+                #cv.imshow("img2", tra)
+                #if cv.waitKey(1) & 0xFF == ord('2'):
+                #    cv.destroyAllWindows()
+                #    break
+
             listener = keyboard.Listener(
                 on_press = on_press2, 
                 on_release = on_release)
@@ -94,35 +123,6 @@ while 1:
                 add_v += 1
                 print("added", time.time()-st)
                 #1-375; 2-3
-
-            for i in range(num):
-                img1 = np.array(sct.grab({'top': top[i], 'left': left, 'width': width, 'height': height[i]}))
-
-                img = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
-
-                _, tra = cv.threshold(img, 20, 255, 1)
-
-                contour, _ = cv.findContours(tra, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
-                #cv.drawContours(img1, contour, -1, (0,0,255))
-                for cnt in contour:
-                    area = cv.contourArea(cnt)
-                    if area > 250:
-                        x, y, w, h = cv.boundingRect(cnt)
-                        x1 = x+0.5*w
-                        y2 = y+0.5*h
-                        y1 = y+0.95*h + add_v*5
-                        #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
-                        #cv.rectangle(img1, (x, y), (x + w, y + h), (0,255,0), 2)
-                        #cv.putText(img1, "%d" % area, (int(x1)-30, int(y2)+7), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
-                        if mou == 0:
-                            mouse.position = (x1+left[i], y1+top[i]) # x1+left, y1+top
-                            mouse.click(Button.left, 1)
-
-                #cv.imshow(f"img{i}", img1)
-                #cv.imshow("img2", tra)
-                #if cv.waitKey(1) & 0xFF == ord('2'):
-                #    cv.destroyAllWindows()
-                #    break
 
     elif (press == 'у' or press == 'e'):
         print("finishing", time.time()-st)
