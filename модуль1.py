@@ -49,6 +49,7 @@ for _ in range(1):
         img = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
         _, tra = cv.threshold(img, 20, 255, 1)
         contour, _ = cv.findContours(tra, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+        #cv.imshow(f"{i}", img1)
     end1 = time.time()-st1
     print(end1)
 
@@ -64,21 +65,25 @@ for _ in range(1):
 
     st2 = time.time()
 
-while 1:
-    num = cv.getTrackbarPos("num", "Tracking1")
-    top, height, left, width, shift, val = get_tr(num)
-    img1 = np.array(sct.grab({'top': shift, 'left': left, 'width': width, 'height': top[-1]+shift+val}))
-    cv.imshow("img", img1)
-    print(img1.shape[1], width, left)
-    for i in range(num):
-        t = top[i]
-        img = img1[t:t+val, 0:width]
-        if img.shape[0] > 0 and img.shape[1] > 0:
-            cv.imshow(f"img{i}", img)
-        else:
-            print(f"wr sizes{i}",top[i],top[i]+height[i])
-            pass
+#while 1:
+
+num = cv.getTrackbarPos("num", "Tracking1")
+top, height, left, width, shift, val = get_tr(num)
+st3 = time.time()
+img1 = np.array(sct.grab({'top': shift, 'left': left, 'width': width, 'height': top[-1]+shift+val}))
+#cv.imshow("img", img1)
+#print(img1.shape[1], width, left)
+for i in range(num):
+    t = top[i]
+    img = img1[t:t+val, 0:width]
+end3 = time.time()-st1
+print(end3)
+    #if img.shape[0] > 0 and img.shape[1] > 0:
+    #    cv.imshow(f"img{i}", img)
+    #else:
+    #    print(f"wr sizes{i}",top[i],top[i]+height[i])
+    #    pass
         
-        if cv.waitKey(1) & 0xFF == ord('2'):
-            cv.destroyAllWindows()
-            break
+    #if cv.waitKey(1) & 0xFF == ord('2'):
+    #    cv.destroyAllWindows()
+    #    break
