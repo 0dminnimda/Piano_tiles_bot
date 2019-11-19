@@ -13,24 +13,27 @@ sct = mss()
 
 def test1(nn):
     init_tr()
-    num = cv.getTrackbarPos("num", "Tracking1")
-    top, height, left, width, shift_y, shift_x = get_tr(num)
+    num_y = cv.getTrackbarPos("num_y", "Tracking1")
+    num_x = cv.getTrackbarPos("num_x", "Tracking1")
+    top, height, left, width, shift_y, shift_x = get_tr(num_y, num_x)
     cv.destroyAllWindows()
 
     arr = []
     for _ in range(nn):
         st = time.time()
 
-        for i in range(num):
-            img1 = np.array(sct.grab({'top': top[i], 'left': left, 'width': width, 'height': height[i]}))
-            #cv.imshow(f"i{i}", img1)
-            #if cv.waitKey(1) & 0xFF == ord('2'):
-            #    cv.destroyAllWindows()
-            #    break
+        for i in range(num_y):
+            for j in range(num_x):
+                img1 = np.array(sct.grab({'top': top[i], 'left': left[j], 'width': width[j]-left[j], 'height': height[i]-top[i]}))
 
-            img = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
-            _, tra = cv.threshold(img, 20, 255, 1)
-            contour, _ = cv.findContours(tra, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+                img = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
+                _, tra = cv.threshold(img, 20, 255, 1)
+                contour, _ = cv.findContours(tra, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+
+                #cv.imshow(f"{(i+1)+(j+1)*10}", img)
+                #if cv.waitKey(1) & 0xFF == ord('2'):
+                #    cv.destroyAllWindows()
+                #    break
 
         end = time.time()-st
         arr.append(end)
@@ -38,26 +41,23 @@ def test1(nn):
 
 def test2(nn):
     init_tr()
-    num = cv.getTrackbarPos("num", "Tracking1")
-    top, height, left, width, shift_y, shift_x = get_tr(num)
+    num_y = cv.getTrackbarPos("num_y", "Tracking1")
+    num_x = cv.getTrackbarPos("num_x", "Tracking1")
+    top, height, left, width, shift_y, shift_x = get_tr(num_y, num_x)
     cv.destroyAllWindows()
 
     arr = []
     for _ in range(nn):
         st = time.time()
 
-        img1 = np.array(sct.grab({'top': shift, 'left': left, 'width': width, 'height': height[-1]}))
-        for i in range(num):
-            img = img1[top[i]:height[i]]
+        img1 = np.array(sct.grab({'top': shift_y, 'left': shift_x, 'width': width[-1], 'height': height[-1]}))
+        for i in range(num_y):
+            for j in range(num_x):
+                img = img1[top[i]:height[i], left[j]:width[j]]
 
-            #cv.imshow(f"i2{i}", img)
-            #if cv.waitKey(1) & 0xFF == ord('2'):
-            #    cv.destroyAllWindows()
-            #    break
-
-            img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-            _, tra = cv.threshold(img, 20, 255, 1)
-            contour, _ = cv.findContours(tra, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+                img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+                _, tra = cv.threshold(img, 20, 255, 1)
+                contour, _ = cv.findContours(tra, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
 
         end = time.time()-st
         arr.append(end)
@@ -112,7 +112,7 @@ num_y = cv.getTrackbarPos("num_y", "Tracking1")
 num_x = cv.getTrackbarPos("num_x", "Tracking1")
 top, height, left, width, shift_y, shift_x = get_tr(num_y, num_x)
 
-while 1:
+while 0:
     num_y = cv.getTrackbarPos("num_y", "Tracking1")
     num_x = cv.getTrackbarPos("num_x", "Tracking1")
     top, height, left, width, shift_y, shift_x = get_tr(num_y, num_x)
@@ -130,5 +130,5 @@ while 1:
         cv.destroyAllWindows()
         break
 
-#test1(50)
-#test2(50)
+test1(50)
+test2(50)
