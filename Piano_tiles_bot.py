@@ -94,33 +94,34 @@ while 1:
         time.sleep(0.1)
 
         while 1:
-            for i in range(num-1, -1, -1):
-                img1 = np.array(sct.grab({'top': top[i], 'left': left, 'width': width, 'height': height[i]}))
+            for i in range(num_y-1, -1, -1):
+                for j in range(num_x):
+                    img1 = np.array(sct.grab({'top': top[i], 'left': left, 'width': width, 'height': height[i]}))
 
-                img = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
+                    img = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
 
-                _, tra = cv.threshold(img, 20, 255, 1)
+                    _, tra = cv.threshold(img, 20, 255, 1)
 
-                contour, _ = cv.findContours(tra, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
-                #cv.drawContours(img1, contour, -1, (0,0,255))
-                for cnt in contour:
-                    area = cv.contourArea(cnt)
-                    if area > 25:
-                        x, y, w, h = cv.boundingRect(cnt)
-                        x1 = x+0.5*w
-                        #y2 = y+0.5*h
-                        y1 = y+0.97*h + add_v*5
-                        #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
-                        #cv.rectangle(img1, (x, y), (x + w, y + h), (0,255,0), 2)
-                        #cv.putText(img1, "%d" % area, (int(x1)-30, int(y2)+7), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
-                        mouse.position = (x1+left[j], y1+top[i]) # (x1+left, y1+top[i])  x1+left, y1+top
-                        mouse.click(Button.left, 1)
+                    contour, _ = cv.findContours(tra, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+                    #cv.drawContours(img1, contour, -1, (0,0,255))
+                    for cnt in contour:
+                        area = cv.contourArea(cnt)
+                        if area > 25:
+                            x, y, w, h = cv.boundingRect(cnt)
+                            x1 = x+0.5*w
+                            y1 = y+0.97*h# + add_v*5
+                            #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
+                            #cv.rectangle(img1, (x, y), (x + w, y + h), (0,255,0), 2)
+                            #y2 = y+0.5*h
+                            #cv.putText(img1, "%d" % area, (int(x1)-30, int(y2)+7), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+                            mouse.position = (x1+left[j], y1+top[i]) # (x1+left, y1+top[i])  x1+left, y1+top
+                            mouse.click(Button.left, 1)
 
-                #cv.imshow(f"img{i}", img1)
-                #cv.imshow("img2", tra)
-                #if cv.waitKey(1) & 0xFF == ord('2'):
-                #    cv.destroyAllWindows()
-                #    break
+                    #cv.imshow(f"img{i}", img1)
+                    #cv.imshow("img2", tra)
+                    #if cv.waitKey(1) & 0xFF == ord('2'):
+                    #    cv.destroyAllWindows()
+                    #    break
 
             listener = keyboard.Listener(
                 on_press = on_press2, 
@@ -133,11 +134,11 @@ while 1:
                 init_tr()
                 break
 
-            if (time.time() - st)%2 <= 0.06 and (press2 == "ы" or press2 == "s"):
-                press2 = None
-                add_v += 1
-                print("added", time.time()-st)
-                #1-375; 2-3
+            #if (time.time() - st)%2 <= 0.06 and (press2 == "ы" or press2 == "s"):
+            #    press2 = None
+            #    add_v += 1
+            #    print("added", time.time()-st)
+            #    #1-375; 2-3
 
     elif (press == 'у' or press == 'e'):
         print("finishing", time.time()-st)
