@@ -15,7 +15,7 @@ def test1(nn):
     init_tr()
     num_y = cv.getTrackbarPos("num_y", "Tracking1")
     num_x = cv.getTrackbarPos("num_x", "Tracking1")
-    top, height, left, width, shift_y, shift_x = get_tr(num_y, num_x)
+    top, height, left, width, shift_y, shift_x, dist_x = get_tr(num_y, num_x)
     cv.destroyAllWindows()
 
     arr = []
@@ -36,7 +36,7 @@ def test1(nn):
                         x, y, w, h = cv.boundingRect(cnt)
                         x1 = x+0.5*w
                         y1 = y+0.97*h# + add_v*5
-                        mouse.position = (x1+left[i+1], y1+top[i])
+                        mouse.position = (x1+left[j], y1+top[i])
                         #mouse.click(Button.left, 1)
 
                 #cv.imshow(f"{(i+1)+(j+1)*10}", img)
@@ -52,7 +52,7 @@ def test2(nn):
     init_tr()
     num_y = cv.getTrackbarPos("num_y", "Tracking1")
     num_x = cv.getTrackbarPos("num_x", "Tracking1")
-    top, height, left, width, shift_y, shift_x = get_tr(num_y, num_x)
+    top, height, left, width, shift_y, shift_x, dist_x = get_tr(num_y, num_x)
     cv.destroyAllWindows()
 
     arr = []
@@ -74,7 +74,7 @@ def test2(nn):
                         x, y, w, h = cv.boundingRect(cnt)
                         x1 = x+0.5*w
                         y1 = y+0.97*h# + add_v*5
-                        mouse.position = (x1+left[i+1], y1+top[i])
+                        mouse.position = (x1+left[j], y1+top[i]) # dist_x = 75
                         #mouse.click(Button.left, 1)
 
         end = time.time()-st
@@ -123,12 +123,12 @@ def get_tr(num_y, num_x):
             left[i] += dist_x*i
     width = [left[i]+val_x for i in range(num_x)]
 
-    return  top, height, left, width, shift_y, shift_x
+    return  top, height, left, width, shift_y, shift_x, dist_x
 
 init_tr()
 num_y = cv.getTrackbarPos("num_y", "Tracking1")
 num_x = cv.getTrackbarPos("num_x", "Tracking1")
-top, height, left, width, shift_y, shift_x = get_tr(num_y, num_x)
+top, height, left, width, shift_y, shift_x, dist_x = get_tr(num_y, num_x)
 
 while 0:
     num_y = cv.getTrackbarPos("num_y", "Tracking1")
@@ -151,4 +151,4 @@ while 0:
 time.sleep(3)
 
 test1(50)
-#test2(50)
+test2(50)

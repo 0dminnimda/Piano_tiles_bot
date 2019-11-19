@@ -68,13 +68,13 @@ def get_tr(num_y, num_x):
             left[i] += dist_x*i
     width = [left[i]+val_x for i in range(num_x)]
 
-    return  top, height, left, width, shift_y, shift_x
+    return  top, height, left, width, shift_y, shift_x, dist_x
 
 mou = 0
 init_tr()
 num_y = cv.getTrackbarPos("num_y", "Tracking1")
 num_x = cv.getTrackbarPos("num_x", "Tracking1")
-top, height, left, width, shift_y, shift_x = get_tr(num_y, num_x)
+top, height, left, width, shift_y, shift_x, dist_x = get_tr(num_y, num_x)
 
 while 1:
     cv.destroyAllWindows()
@@ -89,7 +89,7 @@ while 1:
         print("new game", time.time()-st)
         for i in range(4):
             if mou == 0:
-                mouse.position = (340+72*i, 360)
+                mouse.position = (340+70*i, 360)
                 mouse.click(Button.left, 1)
         time.sleep(0.1)
 
@@ -113,7 +113,7 @@ while 1:
                         #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
                         #cv.rectangle(img1, (x, y), (x + w, y + h), (0,255,0), 2)
                         #cv.putText(img1, "%d" % area, (int(x1)-30, int(y2)+7), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
-                        mouse.position = (x1+left, y1+top[i]) # x1+left, y1+top
+                        mouse.position = (x1+left[j], y1+top[i]) # (x1+left, y1+top[i])  x1+left, y1+top
                         mouse.click(Button.left, 1)
 
                 #cv.imshow(f"img{i}", img1)
