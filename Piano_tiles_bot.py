@@ -35,8 +35,8 @@ def init_tr():
     cv.createTrackbar("num_y", "Tracking1", 1, 10, nothing)
     cv.createTrackbar("num_x", "Tracking1", 4, 10, nothing)
 
-    cv.createTrackbar("val_y", "Tracking1", 40, 500, nothing)
-    cv.createTrackbar("val_x", "Tracking1", 40, 500, nothing)
+    cv.createTrackbar("val_y", "Tracking1", 20, 500, nothing)
+    cv.createTrackbar("val_x", "Tracking1", 20, 500, nothing)
 
     cv.createTrackbar("dist_y", "Tracking1", 123, 200, nothing)
     cv.createTrackbar("dist_x", "Tracking1", 75, 200, nothing)
@@ -108,7 +108,7 @@ while 1:
                         if area > 25:
                             x, y, w, h = cv.boundingRect(cnt)
                             x1 = x+0.5*w
-                            y1 = y+0.97*h# + add_v*5
+                            y1 = y+0.95*h# + add_v*5
                             #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
                             #cv.rectangle(img1, (x, y), (x + w, y + h), (0,255,0), 2)
                             #y2 = y+0.5*h
