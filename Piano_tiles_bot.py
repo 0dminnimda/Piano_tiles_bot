@@ -94,14 +94,13 @@ while 1:
         time.sleep(0.1)
 
         while 1:
+            img1 = np.array(sct.grab({'top': shift_y, 'left': shift_x, 'width': width[-1], 'height': height[-1]}))
             for i in range(num_y-1, -1, -1):
                 for j in range(num_x):
-                    img1 = np.array(sct.grab({'top': top[i], 'left': left, 'width': width, 'height': height[i]}))
+                    img = img1[top[i]:height[i], left[j]:width[j]]
 
-                    img = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
-
+                    img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
                     _, tra = cv.threshold(img, 20, 255, 1)
-
                     contour, _ = cv.findContours(tra, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
                     #cv.drawContours(img1, contour, -1, (0,0,255))
                     for cnt in contour:
