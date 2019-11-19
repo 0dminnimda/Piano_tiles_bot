@@ -69,16 +69,16 @@ def init_tr():
     cv.createTrackbar("pos_y", "Tracking1", 53, 500, nothing)
     cv.createTrackbar("pos_x", "Tracking1", 303, 500, nothing)
 
-    cv.createTrackbar("num_y", "Tracking1", 4, 10, nothing)
-    cv.createTrackbar("num_x", "Tracking1", 2, 10, nothing)
+    cv.createTrackbar("num_y", "Tracking1", 1, 10, nothing)
+    cv.createTrackbar("num_x", "Tracking1", 4, 10, nothing)
 
-    cv.createTrackbar("val_y", "Tracking1", 100, 500, nothing)
-    cv.createTrackbar("val_x", "Tracking1", 100, 500, nothing)
+    cv.createTrackbar("val_y", "Tracking1", 40, 500, nothing)
+    cv.createTrackbar("val_x", "Tracking1", 40, 500, nothing)
 
     cv.createTrackbar("dist_y", "Tracking1", 123, 200, nothing)
-    cv.createTrackbar("dist_x", "Tracking1", 69, 200, nothing)
+    cv.createTrackbar("dist_x", "Tracking1", 70, 200, nothing)
 
-    cv.createTrackbar("shift_y", "Tracking1", 0, 500, nothing)
+    cv.createTrackbar("shift_y", "Tracking1", 20, 500, nothing)
     cv.createTrackbar("shift_x", "Tracking1", 0, 500, nothing)
     pass
 
@@ -118,7 +118,7 @@ while 1:
     top, height, left, width, shift_y, shift_x = get_tr(num_y, num_x)
 
     img1 = np.array(sct.grab({'top': shift_y, 'left': shift_x, 'width': width[-1], 'height': height[-1]}))
-    print(img1.shape)
+    #print(img1.shape)
     for i in range(num_y):
         for j in range(num_x):
             img = img1[top[i]:height[i], left[j]:width[j]]
