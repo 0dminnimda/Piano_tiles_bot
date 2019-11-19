@@ -22,13 +22,22 @@ def test1(nn):
     for _ in range(nn):
         st = time.time()
 
-        for i in range(num_y):
+        for i in range(num_y-1, -1, -1):
             for j in range(num_x):
                 img1 = np.array(sct.grab({'top': top[i], 'left': left[j], 'width': width[j]-left[j], 'height': height[i]-top[i]}))
 
                 img = cv.cvtColor(img1, cv.COLOR_BGR2GRAY)
                 _, tra = cv.threshold(img, 20, 255, 1)
                 contour, _ = cv.findContours(tra, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+
+                for cnt in contour:
+                    area = cv.contourArea(cnt)
+                    if area > 25:
+                        x, y, w, h = cv.boundingRect(cnt)
+                        x1 = x+0.5*w
+                        y1 = y+0.97*h# + add_v*5
+                        mouse.position = (x1+left[i+1], y1+top[i])
+                        #mouse.click(Button.left, 1)
 
                 #cv.imshow(f"{(i+1)+(j+1)*10}", img)
                 #if cv.waitKey(1) & 0xFF == ord('2'):
@@ -51,13 +60,22 @@ def test2(nn):
         st = time.time()
 
         img1 = np.array(sct.grab({'top': shift_y, 'left': shift_x, 'width': width[-1], 'height': height[-1]}))
-        for i in range(num_y):
+        for i in range(num_y-1, -1, -1):
             for j in range(num_x):
                 img = img1[top[i]:height[i], left[j]:width[j]]
 
                 img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
                 _, tra = cv.threshold(img, 20, 255, 1)
                 contour, _ = cv.findContours(tra, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+
+                for cnt in contour:
+                    area = cv.contourArea(cnt)
+                    if area > 25:
+                        x, y, w, h = cv.boundingRect(cnt)
+                        x1 = x+0.5*w
+                        y1 = y+0.97*h# + add_v*5
+                        mouse.position = (x1+left[i+1], y1+top[i])
+                        #mouse.click(Button.left, 1)
 
         end = time.time()-st
         arr.append(end)
@@ -69,7 +87,7 @@ def init_tr():
     cv.createTrackbar("pos_y", "Tracking1", 53, 500, nothing)
     cv.createTrackbar("pos_x", "Tracking1", 303, 500, nothing)
 
-    cv.createTrackbar("num_y", "Tracking1", 1, 10, nothing)
+    cv.createTrackbar("num_y", "Tracking1", 4, 10, nothing)
     cv.createTrackbar("num_x", "Tracking1", 4, 10, nothing)
 
     cv.createTrackbar("val_y", "Tracking1", 40, 500, nothing)
@@ -130,5 +148,7 @@ while 0:
         cv.destroyAllWindows()
         break
 
+time.sleep(3)
+
 test1(50)
-test2(50)
+#test2(50)

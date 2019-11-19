@@ -29,34 +29,52 @@ sct = mss()
 
 def init_tr():
     cv.namedWindow("Tracking1", cv.WINDOW_NORMAL)
-    cv.createTrackbar("num", "Tracking1", 4, 10, nothing)
-    cv.createTrackbar("val", "Tracking1", 5, 200, nothing)
-    cv.createTrackbar("dist", "Tracking1", 123, 200, nothing)
-    cv.createTrackbar("shift", "Tracking1", 0, 500, nothing)
+    cv.createTrackbar("pos_y", "Tracking1", 53, 500, nothing)
+    cv.createTrackbar("pos_x", "Tracking1", 303, 500, nothing)
 
-    cv.createTrackbar("from_width", "Tracking1", 303, 900, nothing)
-    cv.createTrackbar("to_width", "Tracking1", 580, 2560, nothing)
+    cv.createTrackbar("num_y", "Tracking1", 1, 10, nothing)
+    cv.createTrackbar("num_x", "Tracking1", 4, 10, nothing)
+
+    cv.createTrackbar("val_y", "Tracking1", 40, 500, nothing)
+    cv.createTrackbar("val_x", "Tracking1", 40, 500, nothing)
+
+    cv.createTrackbar("dist_y", "Tracking1", 123, 200, nothing)
+    cv.createTrackbar("dist_x", "Tracking1", 75, 200, nothing)
+
+    cv.createTrackbar("shift_y", "Tracking1", 20, 500, nothing)
+    cv.createTrackbar("shift_x", "Tracking1", 0, 500, nothing)
     pass
 
-def get_tr(num):
-    top = [53 for i in range(num)]
-    height = [53-top[i]+cv.getTrackbarPos("val", "Tracking1") for i in range(num)]
-    left = cv.getTrackbarPos("from_width", "Tracking1")
-    width = cv.getTrackbarPos("to_width", "Tracking1")-left
+def get_tr(num_y, num_x):
+    pos_y = cv.getTrackbarPos("pos_y", "Tracking1")
+    val_y = cv.getTrackbarPos("val_y", "Tracking1")
+    shift_y = cv.getTrackbarPos("shift_y", "Tracking1")
+    dist_y = cv.getTrackbarPos("dist_y", "Tracking1")
 
-    shift = cv.getTrackbarPos("shift", "Tracking1")
-    dist = cv.getTrackbarPos("dist", "Tracking1")
+    pos_x = cv.getTrackbarPos("pos_x", "Tracking1")
+    val_x = cv.getTrackbarPos("val_x", "Tracking1")
+    shift_x = cv.getTrackbarPos("shift_x", "Tracking1")
+    dist_x = cv.getTrackbarPos("dist_x", "Tracking1")
+
+    top = [pos_y for i in range(num_y)]
     for i in range(len(top)):
-        top[i] += shift
         if i != 0:
-            top[i] += dist*i
+            top[i] += dist_y*i
+    height = [top[i]+val_y for i in range(num_y)]
 
-    return  top, height, left, width
+    left = [pos_x for i in range(num_x)]
+    for i in range(len(left)):
+        if i != 0:
+            left[i] += dist_x*i
+    width = [left[i]+val_x for i in range(num_x)]
+
+    return  top, height, left, width, shift_y, shift_x
 
 mou = 0
 init_tr()
-num = cv.getTrackbarPos("num", "Tracking1")
-top, height, left, width = get_tr(num)
+num_y = cv.getTrackbarPos("num_y", "Tracking1")
+num_x = cv.getTrackbarPos("num_x", "Tracking1")
+top, height, left, width, shift_y, shift_x = get_tr(num_y, num_x)
 
 while 1:
     cv.destroyAllWindows()
@@ -76,9 +94,6 @@ while 1:
         time.sleep(0.1)
 
         while 1:
-            #num = cv.getTrackbarPos("num", "Tracking1")
-            #top, height, left, width = get_tr(num)
-
             for i in range(num-1, -1, -1):
                 img1 = np.array(sct.grab({'top': top[i], 'left': left, 'width': width, 'height': height[i]}))
 
@@ -94,7 +109,7 @@ while 1:
                         x, y, w, h = cv.boundingRect(cnt)
                         x1 = x+0.5*w
                         #y2 = y+0.5*h
-                        y1 = y+0.95*h + add_v*5
+                        y1 = y+0.97*h + add_v*5
                         #cv.circle(img1,(int(x1),int(y1)),15,(0,255,255), 2)
                         #cv.rectangle(img1, (x, y), (x + w, y + h), (0,255,0), 2)
                         #cv.putText(img1, "%d" % area, (int(x1)-30, int(y2)+7), cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
