@@ -32,7 +32,7 @@ def init_tr():
     cv.createTrackbar("pos_y", "Tracking1", 53, 500, nothing)
     cv.createTrackbar("pos_x", "Tracking1", 303, 500, nothing)
 
-    cv.createTrackbar("num_y", "Tracking1", 1, 10, nothing)
+    cv.createTrackbar("num_y", "Tracking1", 4, 10, nothing)
     cv.createTrackbar("num_x", "Tracking1", 4, 10, nothing)
 
     cv.createTrackbar("val_y", "Tracking1", 20, 500, nothing)
